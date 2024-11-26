@@ -1,9 +1,9 @@
 # LightGBM for detection of prediabetes/diabetes from ECG features
-<img width="500" alt="image" src="https://github.com/user-attachments/assets/9f7d3338-11b6-48b4-87f5-c32c4c4b3d8f">
+<img width="700" alt="image" src="https://github.com/user-attachments/assets/8301ebfa-5699-45bd-9c7b-ffe864f963a9">
 
 ## Demo
 ### ECG feature extraction
-We used ECG-featurizer (https://github.com/Bsingstad/ECG-featurizer), with editing codes to take a CSV file as input.
+We used ECG-featurizer (https://github.com/Bsingstad/ECG-featurizer), with editing codes to take a CSV file as input.  
 * ecg_feature_extraction.sh:  
   Operates ECG feature extraction and returns matrix of #samples x #ECG-features.  
   Specify the path for input and output directories, and sampling rate of the ECGs (Hz).  
@@ -26,7 +26,7 @@ If the classification labels for test data are available, the evaluation of pred
 It uses test.py.   
 * test.sh:  
   Uses test.py to run the test with trained models provided.  
-  If necessary, returns the results of prediction, classification performance report, ROC curve, SHAP summary plot and feature importance.
+  If necessary, returns the results of prediction, classification performance report, ROC curve, SHAP summary plot and feature importance.  
   Specify the following parameters
   * Path to the CSV file of input ECG features for the test
   * Path to the CSV file of classification labels for the test (not needed if 
