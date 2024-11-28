@@ -1,6 +1,8 @@
 # LightGBM for detection of prediabetes/diabetes from ECG features
 <img width="700" alt="image" src="https://github.com/user-attachments/assets/8301ebfa-5699-45bd-9c7b-ffe864f963a9">
 
+(Work in progress)
+
 # Getting Started
 ## Installation
 Clone diabetes_detector with git clone command.  
