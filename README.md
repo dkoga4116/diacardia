@@ -93,7 +93,7 @@ Run test.sh.
 This operates test.py and outputs predictive values and predicted classes in a CSV file.  
 If the classification labels for test data are available, the evaluation of predictive performance including classification performance report, ROC curve, SHAP summary plot and feature importance can be performed.  
 ```sh
-./train.sh
+./test.sh
 ```
 
 Specify the following parameters
