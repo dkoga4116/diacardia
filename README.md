@@ -1,5 +1,5 @@
 # LightGBM for detection of prediabetes/diabetes from ECG features
-<img width="700" alt="image" src="https://github.com/user-attachments/assets/8301ebfa-5699-45bd-9c7b-ffe864f963a9">
+![image](https://github.com/user-attachments/assets/54fb7c7c-bcb0-417b-8001-9faf2503fdaa)
 
 # Contents
 * Codes
