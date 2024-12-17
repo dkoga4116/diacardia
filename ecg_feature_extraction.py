@@ -32,6 +32,11 @@ if __name__ == "__main__":
     # Initialize DataFrame for results
     result_df = pd.DataFrame()
     sampling_frequency = args.sampling_frequency
+    
+    # Determine the conversion coefficient to adjust the voltage values according to the voltage unit
+    voltage_unit = args.voltage_unit
+    conversion_coefficient = voltage_unit / 4.88
+    print(f"Voltage unit: {voltage_unit} mcV. Conversion coefficient: {conversion_coefficient}")
 
     # Feature extraction from each CSV
     feature_extractor = get_features()
@@ -48,7 +53,7 @@ if __name__ == "__main__":
             if num_leads == 1:
                 print(f"Only one lead found in {filename}. Duplicating the lead 11 times for feature extraction.")
                 for i in range(1,12):
-                    df[i] = df[0]
+                    df[i] = df[df.columns[0]]
             elif num_leads == 12:
                 print(f"12 leads found in {filename}. Proceeding with feature extraction.")
                 pass
@@ -56,9 +61,6 @@ if __name__ == "__main__":
                 raise ValueError(f"Invalid number of leads in {filename}. Please check the data and try again.")
             
             # Adjust the voltage values according to the voltage unit
-            voltage_unit = args.voltage_unit
-            conversion_coefficient = voltage_unit / 4.88
-            print(f"Voltage unit: {voltage_unit} mcV. Conversion coefficient: {conversion_coefficient}")
             df = df * conversion_coefficient
             
             # check if there are any NaN values or string values in the dataframe
@@ -111,12 +113,13 @@ if __name__ == "__main__":
     # Exclude all features but those of lead I, if num_leads == 1
     if num_leads == 1:
         cols_lead_1 = [col for col in duplicates_grouped.columns if col.endswith("_I")]
-        print(cols_lead_1)
+        duplicates_grouped = duplicates_grouped[["ecg_id"] + cols_lead_1]
 
     # Save the final DataFrame
-    duplicates_grouped.to_csv(output_csv, index=False)
+    duplicates_grouped.to_csv(output_csv, index=False, header=True)
 
-    print("Process completed. Final results saved to:", output_csv)
+    print(f"Extraction of {len(duplicates_grouped.columns) -1} ECG features completed.")   
+    print("Final results saved to:", output_csv)
     
     # Close standard error output
     f.close()
