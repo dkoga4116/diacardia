@@ -55,18 +55,21 @@ Python version 3.11.4 was used for all analyses.
 We used ECG-featurizer (https://github.com/Bsingstad/ECG-featurizer), with editing codes to use a CSV file as input.  
 ### Data preparation
 Each ECG signal data is expected to be timepoint x leads matrix (if an ECG is 10-s and 500 Hz, 5000x12 matrix).    
-You can specify sampling frequency (Hz) in the script below, which means no need to reformat data to 500 Hz.
+Unit of voltage, which means what the value "1" in the data represents, in microvolt is needed to be specfied (e.g. 4.88 in our original data).
+Sampling frequency (Hz) is needed to be specified (e.g. 500 in our original data).
 ### Run feature extraction
 Run ecg_feature_extraction.sh.  
 ```sh
 ./ecg_feature_extraction.sh
 ```
 This operates ECG feature extraction using feature_extractor.py and ecg_feature_extraction.py, then returns a CSV file of #samples x #ECG-features matrix.  
+If you have single-lead (lead I) ECG, it identifies the number of columns and outputs the features of lead I.  
 
 Specify the following in the script: 
 * input_directory_path: Path to the directory containing the ECG data files  
 * output_directory_path: Path to the directory where the extracted features will be saved
-* sampling_frequency: Sampling frequency of ECG data (set 500 by default)
+* volatge_unit: unit of volage in the records in microvolts (e.g. 4.88 in our original data)
+* sampling_frequency: Sampling frequency of ECG data (e.g. 500 in our original data)
 
 ## Training (if necessary)  
 [[Warning]] Training may be too heavy for a local environment, depending on the sample size and number of ECG features used.  
