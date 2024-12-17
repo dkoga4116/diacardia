@@ -9,9 +9,10 @@ import datetime
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(add_help=False)
-    parser.add_argument('--input_directory_path', type=str, default=None, help='path to the directory where the input CSV files are stored')
-    parser.add_argument('--output_directory_path', type=str, default=None, help='path to the directory where the output ECG feature CSV file will be saved')
-    parser.add_argument('--sample_frequency', type=int, default=500, help='sampling frequency of the ECG data')
+    parser.add_argument('--input_directory_path', type=str, required=True, help='path to the directory where the input CSV files are stored')
+    parser.add_argument('--output_directory_path', type=str, required=True, help='path to the directory where the output ECG feature CSV file will be saved')
+    parser.add_argument('--sampling_frequency', type=int, required=True, help='sampling frequency of the ECG data')
+    parser.add_argument('--voltage_unit', type=float, required=True, help='voltage unit in microvolts')
     args, unk = parser.parse_known_args()
     if unk:
         warn("Unknown arguments:" + str(unk) + ".")   
@@ -30,7 +31,7 @@ if __name__ == "__main__":
 
     # Initialize DataFrame for results
     result_df = pd.DataFrame()
-    sample_frequency = args.sample_frequency
+    sampling_frequency = args.sampling_frequency
 
     # Feature extraction from each CSV
     feature_extractor = get_features()
@@ -38,13 +39,35 @@ if __name__ == "__main__":
         if filename.endswith(".csv"):
             csv_file_path = os.path.join(input_directory, filename)
             df = pd.read_csv(csv_file_path, index_col=False, encoding="cp932")
+            # If lead name is in the first row, delete the first row
+            if type(df.iloc[0,0]) == str:
+                df = df.drop(0)
+                print(f"Deleted the first row in {filename} as it contained lead names.")
+            # Check the number of leads and duplicate the columns 11 times for the extraction process if there is only one lead
+            num_leads = len(df.columns)
+            if num_leads == 1:
+                print(f"Only one lead found in {filename}. Duplicating the lead 11 times for feature extraction.")
+                for i in range(1,12):
+                    df[i] = df[0]
+            elif num_leads == 12:
+                print(f"12 leads found in {filename}. Proceeding with feature extraction.")
+                pass
+            else:
+                raise ValueError(f"Invalid number of leads in {filename}. Please check the data and try again.")
+            
+            # Adjust the voltage values according to the voltage unit
+            voltage_unit = args.voltage_unit
+            conversion_coefficient = voltage_unit / 4.88
+            print(f"Voltage unit: {voltage_unit} mcV. Conversion coefficient: {conversion_coefficient}")
+            df = df * conversion_coefficient
+            
             # check if there are any NaN values or string values in the dataframe
             if df.isnull().values.any() or df.select_dtypes(include=['object']).values.any():
                 raise ValueError(f"Invalid data in {filename}. Please check the data and try again.")
-            # Pass each lead column to the feature extractor and 
+            # Pass each lead column to the feature extractor
             for lead_column in df.columns:
                 lead_data = df[lead_column].values
-                features_lead, feature_names_lead, peak_indices_lead = feature_extractor.featurize_ecg(lead_data, sample_frequency)
+                features_lead, feature_names_lead, peak_indices_lead = feature_extractor.featurize_ecg(lead_data, sampling_frequency)
                 result_row = pd.DataFrame([features_lead], columns=feature_names_lead)
                 result_row.insert(0, "ecg_id", filename.replace(".csv", "")) # Remove the file extension
                 result_row.insert(1, "Lead_Column", lead_column)
@@ -84,6 +107,13 @@ if __name__ == "__main__":
     # Delete columns 2-37
     columns_to_drop = duplicates_grouped.columns[1:37]
     duplicates_grouped = duplicates_grouped.drop(columns=columns_to_drop)
+
+    # Exclude all features but those of lead I, if num_leads == 1
+    if num_leads == 1:
+        cols_lead_1 = [col for col in duplicates_grouped.columns if col.endswith("_I")]
+        print(cols_lead_1)
+        columns_to_drop = duplicates_grouped.columns[37:]
+        duplicates_grouped = duplicates_grouped.drop(columns=columns_to_drop)
 
     # Save the final DataFrame
     duplicates_grouped.to_csv(output_csv, index=False)
