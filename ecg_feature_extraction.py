@@ -38,7 +38,7 @@ if __name__ == "__main__":
     for filename in os.listdir(input_directory):
         if filename.endswith(".csv"):
             csv_file_path = os.path.join(input_directory, filename)
-            df = pd.read_csv(csv_file_path, index_col=False, encoding="cp932")
+            df = pd.read_csv(csv_file_path, index_col=False, encoding="cp932", header=0)
             # If lead name is in the first row, delete the first row
             if type(df.iloc[0,0]) == str:
                 df = df.drop(0)
@@ -112,8 +112,6 @@ if __name__ == "__main__":
     if num_leads == 1:
         cols_lead_1 = [col for col in duplicates_grouped.columns if col.endswith("_I")]
         print(cols_lead_1)
-        columns_to_drop = duplicates_grouped.columns[37:]
-        duplicates_grouped = duplicates_grouped.drop(columns=columns_to_drop)
 
     # Save the final DataFrame
     duplicates_grouped.to_csv(output_csv, index=False)
