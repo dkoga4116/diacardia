@@ -55,7 +55,7 @@ Python version 3.11.4 was used for all analyses.
 We used ECG-featurizer (https://github.com/Bsingstad/ECG-featurizer), with editing codes to use a CSV file as input.  
 ### Data preparation
 Each ECG signal data is expected to be timepoint x leads matrix (if an ECG is 10-s and 500 Hz, 5000x12 matrix).    
-Unit of voltage, which means what the value "1" in the data represents, in microvolt is needed to be specfied (e.g. 4.88 in our original data).
+Unit of voltage, which means what the value "1" in the data represents, in microvolt is needed to be specfied (e.g. 4.88 in our original data).  
 Sampling frequency (Hz) is needed to be specified (e.g. 500 in our original data).
 ### Run feature extraction
 Run ecg_feature_extraction.sh.  
