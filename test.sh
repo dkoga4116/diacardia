@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Set the file and directory paths
-path_to_test_input_csv='./input_ecg_features_12-lead_test.csv' # Path to the input CSV file for ECG features
-path_to_test_label_csv='./label_test.csv' # Path to the input CSV file for classificaiton labels. Set to 'None' if the labels are not available.
+path_to_test_input_csv='./input_ecg_features_12-lead.csv' # Path to the input CSV file for ECG features
+path_to_test_label_csv='./class_labels.csv' # Path to the input CSV file for classificaiton labels. Set to 'None' if the labels are not available.
 label_name='prediabetes_diabetes' # Name of the column in the label CSV file that contains the labels. Set to 'None' if the labels are not available.
 model_dir='model_12-lead' # Directory where the saved models are stored.
 output_dir='./test_reusults' # Directory to save the output  
