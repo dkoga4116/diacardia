@@ -114,8 +114,8 @@ def visualize_predictions(models, threshold, X_test, y_test, y_pred_test, y_pred
     ## Create a plot of SHAP values ================================================================
     # Create and save a plot of SHAP values
     shap.summary_plot(mean_shap_values, X_test, feature_names=col_names, show=False, max_display=20)
-    plt.title("Mean SHAP values from 10 models")
-    plt.savefig(os.path.join(output_dir, "mean_shap.png"), dpi=300)
+    plt.title("SHAP summary plot")
+    plt.savefig(os.path.join(output_dir, "shap_summary.png"), dpi=300)
     plt.close()
     print("SHAP values have been saved to:", os.path.join(output_dir, 'shap_summaryplot.png'))
 
