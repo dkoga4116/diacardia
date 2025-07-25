@@ -18,11 +18,15 @@
   * Standarized ECG feature for demo (our test data, N=1676)
     * input_ecg_features_12-lead.csv &emsp;[12-lead ECG]
     * input_ecg_features_1-lead.csv &emsp;[Single-lead (lead I) ECG]
+    * input_ecg_features_12-lead_external_cohort.csv  &emsp;[12-lead ECG _for external validation_] 
   * Trained models and the classification for test (directory)
     * model_12-lead &emsp; [for 12-lead ECG]
     * model_1-lead &emsp; [for single-lead (lead I) ECG]
+    * model_12-lead_matched &emsp; [for _propensity score–matched_ 12-lead ECG]
   * Classification label for demo
-    * class_labels.csv
+    * class_labels.CSV
+    * class_labels_matched.csv &emsp;[_for propensity score–matched analysis_]
+    * class_labels_external_cohort.csv &emsp;[_for external validation_]
   * List of ECG features used (to be used for ECG extraction for original data)
     * feature_list_269_12-lead.csv &emsp; [269 features for 12-lead ECG analysis]
     * feature_list_28_1-lead.csv &emsp; [28 features for single-lead (lead I) analysis]
@@ -173,3 +177,6 @@ For your own data, please specify the following in the script:
 * model_dir: Path to the directory where the models and the classification threshold are saved
 * output_dir: Path to the output directory
 * Whether evaluation of predictive performance is needed (uncomment the far bottom line of the script to enable evaluation)
+
+To reproduce the results of our propensity score–matched analysis, use _input_ecg_features_12-lead.csv_ (same as for all samples) as input, _class_labels_matched.csv_ as label data, and models in _model_12-lead_matched_ directory.  
+To reproduce our external validation results, use _input_ecg_features_12-lead_external_cohort.csv_ as input, _class_labels_external_cohort.csv_ as label data, and models in _model_12-lead_ directory (same as for internal validation).
