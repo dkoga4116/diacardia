@@ -7,6 +7,9 @@
     * ecg_feature_extraction.sh
     * ecg_feature_extraction.py
     * feature_extractor.py
+  * For feature selection, filling of the null data and standard scaling (when applying data to our trained model)  
+    * select_features_and_normalize.sh
+    * select_features_and_normalize.py
   * For training with hyperparameter optimization
     * train.sh
     * train.py
@@ -30,6 +33,8 @@
   * List of ECG features used (to be used for ECG extraction for original data)
     * feature_list_269_12-lead.csv &emsp; [269 features for 12-lead ECG analysis]
     * feature_list_28_1-lead.csv &emsp; [28 features for single-lead (lead I) analysis]
+  * Table of median, mean, and standard deviations for filling of null data and normalization
+    * median_mean_std_dev_dataset.csv
 
 # Getting Started
 ## Installation
@@ -88,8 +93,6 @@ python ecg_feature_extraction.py \
     --voltage_unit ${voltage_unit} \
     --sampling_frequency ${sampling_frequency}
 ```
-
-
 For your own data, please specify the following in the script: 
 * input_directory_path: Path to the directory containing the ECG data files  
 * output_directory_path: Path to the directory where the extracted features will be saved
@@ -97,6 +100,21 @@ For your own data, please specify the following in the script:
   * In the output time feature values, "1" equals to 1 second.
 * volatge_unit: unit of volage in the records in microvolts (e.g. 4.88 in our original data)
 * sampling_frequency: Sampling frequency of ECG data (e.g. 500 in our original data)
+
+## Select features and normalize data (when applying our trained model)  
+When applying our trained model to an original dataset to make predictions, you need to perform feature selection and standard normalization.  
+### Run feature selection and normalization
+In our model, we used 269 selected features for 12-lead analysis and 28 selected features for single-lead analysis.   
+The 269 and 28 features are listed in feature_list_269_12-lead.csv and feature_list_28_1-lead.csv, respectively.   
+We filled null data with medians from our development dataset and performed standard scaling using means and standard deviations from our development dataset.
+  
+Run select_features_and_normalize.sh.  
+Set the directory and filename for the CSV file of ECG features to process, and the number of the leads used (1 or 12).
+
+```sh
+./select_features_and_normalize.sh
+```
+This operates ECG feature extraction using select_features_and_normalize.py, a feature list file (feature_list_269_12-lead.csv or feature_list_28_1-lead.csv), and median_mean_std_dev_dataset.csv to generate the feature-selected and normalized input data ecg_features_filled_std.csv.
 
 ## Training
 [Note] As a demonstration, the numbers of both boosting rounds and optimizaion trials are set much less than those of our original analyses, because full training process may be too heavy for a local environment.  
